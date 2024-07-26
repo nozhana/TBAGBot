@@ -6,7 +6,7 @@ import { hydrateReply, parseMode } from "@grammyjs/parse-mode";
 import allGamesHandler from "./app/game/all-games-handler";
 import { hydrateFiles } from "@grammyjs/files";
 import { conversations, createConversation } from "@grammyjs/conversations";
-import importGameConversation from "./app/game/import-game-handler";
+import importGameConversation from "./app/game/import-game-conversation";
 
 const bot = new Bot<MyContext>(process.env.BOT_TOKEN!);
 

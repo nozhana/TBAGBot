@@ -10,7 +10,10 @@ const gameMenu = new Menu<MyContext>("game-menu")
   .row()
   .back(
     (ctx) => ctx.t("btn-back"),
-    (ctx) => ctx.editMessageText(ctx.t("game_html-all"))
+    async (ctx) => {
+      await ctx.answerCallbackQuery("game_cb-all");
+      return ctx.editMessageText(ctx.t("game_html-all"));
+    }
   );
 
 export default gameMenu;
