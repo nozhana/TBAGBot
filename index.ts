@@ -7,6 +7,7 @@ import allGamesHandler from "./app/game/all-games-handler";
 import { hydrateFiles } from "@grammyjs/files";
 import { conversations, createConversation } from "@grammyjs/conversations";
 import importGameConversation from "./app/game/import-game-conversation";
+import allGamesMenu from "./app/game/all-games-menu";
 
 const bot = new Bot<MyContext>(process.env.BOT_TOKEN!);
 
@@ -34,6 +35,8 @@ bot.api.config.use(parseMode("HTML"));
 bot.api.config.use(hydrateFiles(bot.token));
 
 // ROUTING
+
+bot.use(allGamesMenu);
 
 bot.command(["start", "games"], allGamesHandler);
 
