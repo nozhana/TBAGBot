@@ -1,20 +1,32 @@
 import { Bot, session } from "grammy";
-import MyContext from "./app/core/context";
+import MyContext, { prismaMiddleware } from "./app/core/context";
 import i18n from "./app/core/i18n";
 import { FileAdapter } from "@grammyjs/storage-file";
 import { hydrateReply, parseMode } from "@grammyjs/parse-mode";
+import allGamesHandler from "./app/game/all-games-handler";
 
 const bot = new Bot<MyContext>(process.env.BOT_TOKEN!);
 
 // MIDDLEWARES
 
-bot.use(session({ storage: new FileAdapter({ dirName: "sessions" }) }));
+bot.use(
+  session({
+    initial: () => ({}),
+    storage: new FileAdapter({ dirName: "sessions" }),
+  })
+);
+
+bot.use(prismaMiddleware);
 
 bot.use(i18n);
 
 bot.use(hydrateReply);
 
 bot.api.config.use(parseMode("HTML"));
+
+// ROUTING
+
+bot.command(["start", "games"], allGamesHandler);
 
 // ERROR HANDLING
 
