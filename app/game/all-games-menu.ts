@@ -22,7 +22,7 @@ const allGamesMenu = new Menu<MyContext>("all-games-menu")
   .text(
     {
       text: (ctx) =>
-        "⬅️ " + ctx.t("btn-page", { page: String(ctx.match || 1) }),
+        "⬅️ " + ctx.t("btn-page", { page: String(Number(ctx.match || 1) - 1) }),
       payload: (ctx) => String((Number(ctx.match) || 1) - 1),
     },
     async (ctx) => {
@@ -40,7 +40,7 @@ const allGamesMenu = new Menu<MyContext>("all-games-menu")
   .text(
     {
       text: (ctx) =>
-        ctx.t("btn-page", { page: String(ctx.match || 1) }) + " ➡️",
+        ctx.t("btn-page", { page: String(Number(ctx.match || 1) + 1) }) + " ➡️",
       payload: (ctx) => String((Number(ctx.match) || 1) + 1),
     },
     async (ctx) => {
@@ -50,7 +50,7 @@ const allGamesMenu = new Menu<MyContext>("all-games-menu")
       });
       const pages = Math.ceil(gameCount / 10);
 
-      if (Number(ctx.match || 1) > pages)
+      if (Number(ctx.match || 1) >= pages)
         return ctx.answerCallbackQuery({
           text: ctx.t("cb-no-pages"),
           show_alert: true,
