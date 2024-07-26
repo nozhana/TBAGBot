@@ -4,6 +4,9 @@ import i18n from "./app/core/i18n";
 import { FileAdapter } from "@grammyjs/storage-file";
 import { hydrateReply, parseMode } from "@grammyjs/parse-mode";
 import allGamesHandler from "./app/game/all-games-handler";
+import { hydrateFiles } from "@grammyjs/files";
+import { conversations, createConversation } from "@grammyjs/conversations";
+import importGameConversation from "./app/game/import-game-handler";
 
 const bot = new Bot<MyContext>(process.env.BOT_TOKEN!);
 
@@ -16,6 +19,10 @@ bot.use(
   })
 );
 
+bot.use(conversations());
+
+bot.use(createConversation(importGameConversation));
+
 bot.use(prismaMiddleware);
 
 bot.use(i18n);
@@ -23,6 +30,8 @@ bot.use(i18n);
 bot.use(hydrateReply);
 
 bot.api.config.use(parseMode("HTML"));
+
+bot.api.config.use(hydrateFiles(bot.token));
 
 // ROUTING
 

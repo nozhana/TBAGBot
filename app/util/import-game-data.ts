@@ -80,6 +80,11 @@ async function importGameData(
   const data = await readFile(filePath, "utf8");
   const gameData: GameData = JSON.parse(data);
 
+  const entryRoomId = {
+    id: gameData.player.starting_location,
+    objectId: ObjectId(),
+  };
+
   const game = await prisma.game.create({
     data: {
       title: gameData.meta.title,
@@ -90,6 +95,7 @@ async function importGameData(
       defense: gameData.meta.initialData.defense || 100,
       health: gameData.meta.initialData.health || 100,
       stamina: gameData.meta.initialData.stamina || 100,
+      entryRoomId: entryRoomId.objectId.str,
     },
   });
 
@@ -103,6 +109,8 @@ async function importGameData(
   for (const location of gameData.locations) {
     const room = await prisma.room.create({
       data: {
+        id:
+          location.id === entryRoomId.id ? entryRoomId.objectId.str : undefined,
         title: location.name,
         description: location.description,
         game: { connect: { id: game.id } },

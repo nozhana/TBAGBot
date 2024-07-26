@@ -1,3 +1,5 @@
+import { Conversation, ConversationFlavor } from "@grammyjs/conversations";
+import { FileFlavor } from "@grammyjs/files";
 import { I18nFlavor } from "@grammyjs/i18n";
 import { ParseModeFlavor } from "@grammyjs/parse-mode";
 import { PrismaClient } from "@prisma/client";
@@ -14,9 +16,12 @@ export const prismaMiddleware = (ctx: MyContextFlavor, next: NextFunction) => {
   return next();
 };
 
-type MyContext = ParseModeFlavor<Context> &
+type MyContext = FileFlavor<ParseModeFlavor<Context>> &
   I18nFlavor &
   SessionFlavor<SessionData> &
+  ConversationFlavor &
   MyContextFlavor;
+
+export type MyConversation = Conversation<MyContext>;
 
 export default MyContext;
