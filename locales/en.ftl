@@ -1,4 +1,4 @@
-btn-page = Page ${page}
+btn-page = Page {$page}
 cb-no-pages = No more pages!
 btn-back = 👈 Back
 
