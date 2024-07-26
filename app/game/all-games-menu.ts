@@ -49,6 +49,7 @@ const allGamesMenu = new Menu<MyContext>("all-games-menu")
         where: { authorId: ctx.from.id },
       });
       const pages = Math.ceil(gameCount / 10);
+      console.log(`Pages ${pages}`);
 
       if (Number(ctx.match || 1) >= pages)
         return ctx.answerCallbackQuery({
