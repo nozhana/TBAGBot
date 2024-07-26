@@ -28,6 +28,11 @@ model Game {
   authorId    Int
   version     String @default("0.0.1")
   description String @default("A thrilling text-based adventure game.")
+  health      Int
+  stamina     Int
+  attack      Int
+  defense     Int
+  rooms       Room[]
   inventory   Item[]
 
   @@map("games")
@@ -40,6 +45,8 @@ model Room {
   exits       Exit[]
   items       Item[]   @relation(fields: [itemIds], references: [id])
   itemIds     String[] @db.ObjectId
+  game        Game     @relation(fields: [gameId], references: [id])
+  gameId      String   @db.ObjectId
 
   @@map("rooms")
 }
@@ -68,27 +75,29 @@ enum Direction {
 }
 
 model Item {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String
-  type        ItemType
-  fixed       Boolean  @default(false)
-  pushable    Boolean  @default(false)
-  pickable    Boolean  @default(true)
-  hidden      Boolean  @default(false)
-  rooms       Room[]   @relation(fields: [roomIds], references: [id])
-  roomIds     String[] @db.ObjectId
-  game        Game     @relation(fields: [gameId], references: [id])
-  gameId      String   @db.ObjectId
+  usable      Boolean
+  effects     ItemEffect[]
+  fixed       Boolean      @default(false)
+  pushable    Boolean      @default(false)
+  pickable    Boolean      @default(true)
+  hidden      Boolean      @default(false)
+  rooms       Room[]       @relation(fields: [roomIds], references: [id])
+  roomIds     String[]     @db.ObjectId
+  game        Game         @relation(fields: [gameId], references: [id])
+  gameId      String       @db.ObjectId
 
   @@map("items")
 }
 
-enum ItemType {
-  general
-  tool
-  food
-  weapon
+model ItemEffect {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  description String
+  statChanges Json
+  item        Item   @relation(fields: [itemId], references: [id])
+  itemId      String @db.ObjectId
 
-  @@map("item_type")
+  @@map("item_effects")
 }
