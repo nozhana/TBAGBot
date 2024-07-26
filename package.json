@@ -32,6 +32,7 @@
     "@grammyjs/menu": "^1.2.2",
     "@grammyjs/parse-mode": "^1.10.0",
     "@grammyjs/storage-file": "^2.4.2",
+    "@prisma/client": "^5.17.0",
     "grammy": "^1.27.0",
     "prisma": "^5.17.0"
   }

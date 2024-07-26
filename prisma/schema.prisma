@@ -9,6 +9,86 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int    @id @map("_id")
+  firstName String
+  games     Game[]
+
+  @@map("users")
+}
+
+model Game {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  author      User   @relation(fields: [authorId], references: [id])
+  authorId    Int
+  version     String @default("0.0.1")
+  description String @default("A thrilling text-based adventure game.")
+  inventory   Item[]
+
+  @@map("games")
+}
+
+model Room {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  exits       Exit[]
+  items       Item[]   @relation(fields: [itemIds], references: [id])
+  itemIds     String[] @db.ObjectId
+
+  @@map("rooms")
+}
+
+model Exit {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  direction Direction
+  room      Room      @relation(fields: [roomId], references: [id])
+  roomId    String    @db.ObjectId
+  targetId  String    @db.ObjectId
+
+  @@map("exits")
+}
+
+enum Direction {
+  north
+  northeast
+  east
+  southeast
+  south
+  southwest
+  west
+  northwest
+
+  @@map("direction")
+}
+
+model Item {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  type        ItemType
+  fixed       Boolean  @default(false)
+  pushable    Boolean  @default(false)
+  pickable    Boolean  @default(true)
+  hidden      Boolean  @default(false)
+  rooms       Room[]   @relation(fields: [roomIds], references: [id])
+  roomIds     String[] @db.ObjectId
+  game        Game     @relation(fields: [gameId], references: [id])
+  gameId      String   @db.ObjectId
+
+  @@map("items")
+}
+
+enum ItemType {
+  general
+  tool
+  food
+  weapon
+
+  @@map("item_type")
 }
