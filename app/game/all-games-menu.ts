@@ -34,7 +34,7 @@ const allGamesMenu = new Menu<MyContext>("all-games-menu")
       await ctx.answerCallbackQuery(
         ctx.t("game_cb-all-page", { page: ctx.match })
       );
-      ctx.menu.update();
+      await ctx.menu.update({ immediate: true });
     }
   )
   .text(
@@ -58,7 +58,7 @@ const allGamesMenu = new Menu<MyContext>("all-games-menu")
       await ctx.answerCallbackQuery(
         ctx.t("game_cb-all-page", { page: ctx.match })
       );
-      ctx.menu.update();
+      await ctx.menu.update({ immediate: true });
     }
   )
   .row()
