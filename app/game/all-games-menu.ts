@@ -1,8 +1,11 @@
 import { Menu } from "@grammyjs/menu";
 import MyContext from "../core/context";
 import answerCallbackComingSoon from "../util/cb-coming-soon";
+import { InlineKeyboard } from "grammy";
 
-const allGamesMenu = new Menu<MyContext>("all-games-menu")
+const allGamesMenu = new Menu<MyContext>("all-games-menu", {
+  autoAnswer: false,
+})
   .dynamic(async (ctx, range) => {
     const { prisma } = ctx;
     const games = await prisma.game.findMany({
@@ -16,8 +19,6 @@ const allGamesMenu = new Menu<MyContext>("all-games-menu")
         .text({ text: game.title, payload: game.id }, answerCallbackComingSoon)
         .row();
     }
-
-    return range;
   })
   .text(
     {
@@ -26,6 +27,7 @@ const allGamesMenu = new Menu<MyContext>("all-games-menu")
       payload: (ctx) => String((Number(ctx.match) || 1) - 1),
     },
     async (ctx) => {
+      const { prisma } = ctx;
       if (Number(ctx.match || 1) < 1)
         return ctx.answerCallbackQuery({
           text: ctx.t("cb-no-pages"),
@@ -34,7 +36,12 @@ const allGamesMenu = new Menu<MyContext>("all-games-menu")
       await ctx.answerCallbackQuery(
         ctx.t("game_cb-all-page", { page: ctx.match })
       );
-      await ctx.menu.update({ immediate: true });
+      const games = await prisma.game.findMany({
+        skip: (Number(ctx.match || 1) - 1) * 10,
+        take: 10,
+        where: { authorId: ctx.from.id },
+      });
+      // update menu
     }
   )
   .text(
@@ -58,7 +65,6 @@ const allGamesMenu = new Menu<MyContext>("all-games-menu")
       await ctx.answerCallbackQuery(
         ctx.t("game_cb-all-page", { page: ctx.match })
       );
-      await ctx.menu.update({ immediate: true });
     }
   )
   .row()

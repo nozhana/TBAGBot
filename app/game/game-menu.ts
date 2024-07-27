@@ -2,7 +2,7 @@ import { Menu } from "@grammyjs/menu";
 import MyContext from "../core/context";
 import answerCallbackComingSoon from "../util/cb-coming-soon";
 
-const gameMenu = new Menu<MyContext>("game-menu")
+const gameMenu = new Menu<MyContext>("game-menu", { autoAnswer: false })
   .text((ctx) => ctx.t("game_btn-play"), answerCallbackComingSoon)
   .row()
   .text((ctx) => ctx.t("game_btn-edit"), answerCallbackComingSoon)
