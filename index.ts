@@ -15,7 +15,7 @@ const bot = new Bot<MyContext>(process.env.BOT_TOKEN!);
 
 bot.use(
   session({
-    initial: () => ({}),
+    initial: () => ({ routerKey: "idle" }),
     storage: new FileAdapter({ dirName: "sessions" }),
   })
 );

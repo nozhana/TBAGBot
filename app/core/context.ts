@@ -4,8 +4,11 @@ import { I18nFlavor } from "@grammyjs/i18n";
 import { ParseModeFlavor } from "@grammyjs/parse-mode";
 import { PrismaClient } from "@prisma/client";
 import { Context, NextFunction, SessionFlavor } from "grammy";
+import { RouterKey } from "./routes";
 
-interface SessionData {}
+interface SessionData {
+  routerKey: RouterKey;
+}
 
 interface MyContextFlavor {
   prisma: PrismaClient;
@@ -16,10 +19,9 @@ export const prismaMiddleware = (ctx: MyContextFlavor, next: NextFunction) => {
   return next();
 };
 
-type MyContext = FileFlavor<ParseModeFlavor<Context>> &
+type MyContext = ConversationFlavor<FileFlavor<ParseModeFlavor<Context>>> &
   I18nFlavor &
   SessionFlavor<SessionData> &
-  ConversationFlavor &
   MyContextFlavor;
 
 export type MyConversation = Conversation<MyContext>;
