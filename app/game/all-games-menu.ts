@@ -27,7 +27,6 @@ const allGamesMenu = new Menu<MyContext>("all-games-menu", {
       payload: (ctx) => String((Number(ctx.match) || 1) - 1),
     },
     async (ctx) => {
-      const { prisma } = ctx;
       if (Number(ctx.match || 1) < 1)
         return ctx.answerCallbackQuery({
           text: ctx.t("cb-no-pages"),
@@ -36,12 +35,7 @@ const allGamesMenu = new Menu<MyContext>("all-games-menu", {
       await ctx.answerCallbackQuery(
         ctx.t("game_cb-all-page", { page: ctx.match })
       );
-      const games = await prisma.game.findMany({
-        skip: (Number(ctx.match || 1) - 1) * 10,
-        take: 10,
-        where: { authorId: ctx.from.id },
-      });
-      // update menu
+      ctx.menu.update();
     }
   )
   .text(
@@ -65,6 +59,7 @@ const allGamesMenu = new Menu<MyContext>("all-games-menu", {
       await ctx.answerCallbackQuery(
         ctx.t("game_cb-all-page", { page: ctx.match })
       );
+      ctx.menu.update();
     }
   )
   .row()
