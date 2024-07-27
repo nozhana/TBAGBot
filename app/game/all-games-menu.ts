@@ -1,11 +1,8 @@
 import { Menu } from "@grammyjs/menu";
 import MyContext from "../core/context";
 import answerCallbackComingSoon from "../util/cb-coming-soon";
-import { InlineKeyboard } from "grammy";
 
-const allGamesMenu = new Menu<MyContext>("all-games-menu", {
-  autoAnswer: false,
-})
+const allGamesMenu = new Menu<MyContext>("all-games-menu")
   .dynamic(async (ctx, range) => {
     const { prisma } = ctx;
     const games = await prisma.game.findMany({
@@ -27,14 +24,7 @@ const allGamesMenu = new Menu<MyContext>("all-games-menu", {
       payload: (ctx) => String((Number(ctx.match) || 1) - 1),
     },
     async (ctx) => {
-      if (Number(ctx.match || 1) < 1)
-        return ctx.answerCallbackQuery({
-          text: ctx.t("cb-no-pages"),
-          show_alert: true,
-        });
-      await ctx.answerCallbackQuery(
-        ctx.t("game_cb-all-page", { page: ctx.match })
-      );
+      if (Number(ctx.match || 1) < 1) return;
       ctx.menu.update();
     }
   )
@@ -51,14 +41,7 @@ const allGamesMenu = new Menu<MyContext>("all-games-menu", {
       });
       const pages = Math.ceil(gameCount / 10);
 
-      if (Number(ctx.match || 1) >= pages)
-        return ctx.answerCallbackQuery({
-          text: ctx.t("cb-no-pages"),
-          show_alert: true,
-        });
-      await ctx.answerCallbackQuery(
-        ctx.t("game_cb-all-page", { page: ctx.match })
-      );
+      if (Number(ctx.match || 1) >= pages) return;
       ctx.menu.update();
     }
   )
