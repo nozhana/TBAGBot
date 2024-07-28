@@ -48,7 +48,9 @@ bot.command(["start", "games"], allGamesHandler);
 
 // ERROR HANDLING
 
-bot.catch((err) => console.log(`❌ ERROR:\n${err}`));
+bot.catch((err) =>
+  console.log(`❌ ERROR:\n${err}\n📚 STACKTRACE:\n${err.stack}`)
+);
 
 // RUN
 
