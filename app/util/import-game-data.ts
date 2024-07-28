@@ -75,10 +75,9 @@ interface GameData {
 async function importGameData(
   prisma: PrismaClient,
   userId: number,
-  filePath: PathLike
+  jsonContent: string
 ) {
-  const data = await readFile(filePath, "utf8");
-  const gameData: GameData = JSON.parse(data);
+  const gameData: GameData = JSON.parse(jsonContent);
   console.log(`🔎 GameData:\n${gameData}`);
 
   const entryRoomId = {

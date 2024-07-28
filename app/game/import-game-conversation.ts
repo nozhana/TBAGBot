@@ -1,6 +1,7 @@
 import { InlineKeyboard } from "grammy";
 import MyContext, { MyConversation } from "../core/context";
 import importGameData from "../util/import-game-data";
+import { readFile } from "fs/promises";
 
 async function importGameConversation(
   conversation: MyConversation,
@@ -17,10 +18,10 @@ async function importGameConversation(
       await ctx.reply("📁 Document uploaded.");
       const file = await ctx.api.getFile(message.document.file_id);
       const path = await file.download();
+      const buffer = await readFile(path, "utf8");
       await importGameData(prisma, message.from.id, path);
     } else if (message.text) {
-      const buffer = Buffer.from(message.text, "utf-8");
-      await importGameData(prisma, message.from.id, buffer);
+      await importGameData(prisma, message.from.id, message.text);
     }
 
     await ctx.reply("🕹️ Game data imported.");
