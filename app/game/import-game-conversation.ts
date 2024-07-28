@@ -17,10 +17,10 @@ async function importGameConversation(
       await ctx.reply("📁 Document uploaded.");
       const file = await ctx.api.getFile(message.document.file_id);
       const path = await file.download();
-      await importGameData(prisma, ctx.from!.id, path);
-    } else if (ctx.message?.text) {
-      const buffer = Buffer.from(ctx.message.text, "utf-8");
-      await importGameData(prisma, ctx.from!.id, buffer);
+      await importGameData(prisma, message.from.id, path);
+    } else if (message.text) {
+      const buffer = Buffer.from(message.text, "utf-8");
+      await importGameData(prisma, message.from.id, buffer);
     }
 
     await ctx.reply("🕹️ Game data imported.");
