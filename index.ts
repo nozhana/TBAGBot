@@ -20,16 +20,6 @@ bot.use(
   })
 );
 
-// MENUS
-
-bot.use(allGamesMenu);
-
-// CONVERSATIONS
-
-bot.use(conversations());
-
-bot.use(createConversation(importGameConversation, "import-game"));
-
 // MIDDLEWARE
 
 bot.use(prismaMiddleware);
@@ -41,6 +31,16 @@ bot.use(hydrateReply);
 bot.api.config.use(parseMode("HTML"));
 
 bot.api.config.use(hydrateFiles(bot.token));
+
+// MENUS
+
+bot.use(allGamesMenu);
+
+// CONVERSATIONS
+
+bot.use(conversations());
+
+bot.use(createConversation(importGameConversation, "import-game"));
 
 // ROUTING
 
