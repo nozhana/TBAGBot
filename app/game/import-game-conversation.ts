@@ -19,8 +19,7 @@ async function importGameConversation(
       const path = await file.download();
       await importGameData(prisma, ctx.from!.id, path);
     } else if (ctx.message?.text) {
-      const json = JSON.stringify(JSON.parse(ctx.message.text));
-      const buffer = Buffer.from(json, "utf-8");
+      const buffer = Buffer.from(ctx.message.text, "utf-8");
       await importGameData(prisma, ctx.from!.id, buffer);
     }
 
