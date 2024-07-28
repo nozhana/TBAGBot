@@ -32,15 +32,15 @@ bot.api.config.use(parseMode("HTML"));
 
 bot.api.config.use(hydrateFiles(bot.token));
 
-// MENUS
-
-bot.use(allGamesMenu);
-
 // CONVERSATIONS
 
 bot.use(conversations());
 
 bot.use(createConversation(importGameConversation, "import-game"));
+
+// MENUS
+
+bot.use(allGamesMenu);
 
 // ROUTING
 
