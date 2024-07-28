@@ -39,7 +39,10 @@ const allGamesMenu = new Menu<MyContext>("all-games-menu")
   })
   .text(
     (ctx) => ctx.t("game_btn-import"),
-    (ctx) => ctx.conversation.enter("import-game")
+    async (ctx) => {
+      ctx.menu.close();
+      await ctx.conversation.enter("import-game");
+    }
   );
 
 allGamesMenu.register(gameMenu);

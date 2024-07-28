@@ -1,14 +1,12 @@
 import { InlineKeyboard } from "grammy";
 import MyContext, { MyConversation } from "../core/context";
 import importGameData from "../util/import-game-data";
-import allGamesMenu from "./all-games-menu";
 
 async function importGameConversation(
   conversation: MyConversation,
   ctx: MyContext
 ) {
   const { prisma } = ctx;
-  await ctx.editMessageReplyMarkup({ reply_markup: new InlineKeyboard() });
   await ctx.reply("Please send a JSON text or file to import as a game.");
   const { message } = await conversation.waitFor([":document", ":text"], {
     otherwise: (ctx) => ctx.reply("Please send a document or text!"),
@@ -26,11 +24,9 @@ async function importGameConversation(
       await importGameData(prisma, ctx.from!.id, buffer);
     }
 
-    await ctx.reply("🕹️ Game data imported.", { reply_markup: allGamesMenu });
+    await ctx.reply("🕹️ Game data imported.");
   } catch (error) {
-    await ctx.reply(`❌ <b>ERROR - IMPORT GAME:</b>\n${error}`, {
-      reply_markup: allGamesMenu,
-    });
+    await ctx.reply(`❌ <b>ERROR - IMPORT GAME:</b>\n${error}`);
     console.log(`❌ <b>ERROR - IMPORT GAME:</b>\n${error}`);
   }
 }
