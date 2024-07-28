@@ -11,7 +11,7 @@ import allGamesMenu from "./app/game/all-games-menu";
 
 const bot = new Bot<MyContext>(process.env.BOT_TOKEN!);
 
-// MIDDLEWARES
+// SESSION
 
 bot.use(
   session({
@@ -20,9 +20,17 @@ bot.use(
   })
 );
 
+// MENUS
+
+bot.use(allGamesMenu);
+
+// CONVERSATIONS
+
 bot.use(conversations());
 
-bot.use(createConversation(importGameConversation));
+bot.use(createConversation(importGameConversation, "import-game"));
+
+// MIDDLEWARE
 
 bot.use(prismaMiddleware);
 
@@ -35,8 +43,6 @@ bot.api.config.use(parseMode("HTML"));
 bot.api.config.use(hydrateFiles(bot.token));
 
 // ROUTING
-
-bot.use(allGamesMenu);
 
 bot.command(["start", "games"], allGamesHandler);
 

@@ -11,7 +11,6 @@ const gameMenu = new Menu<MyContext>("game-menu")
   .back(
     (ctx) => ctx.t("btn-back"),
     async (ctx) => {
-      await ctx.answerCallbackQuery("game_cb-all");
       return ctx.editMessageText(ctx.t("game_html-all"));
     }
   );
