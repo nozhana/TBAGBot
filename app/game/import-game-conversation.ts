@@ -7,7 +7,6 @@ async function importGameConversation(
   ctx: MyContext
 ) {
   const { prisma } = ctx;
-  await ctx.editMessageReplyMarkup(undefined);
   await ctx.reply("Please send a JSON text or file to import as a game.");
   const { message } = await conversation.waitFor([":document", ":text"], {
     otherwise: (ctx) => ctx.reply("Please send a document or text!"),
