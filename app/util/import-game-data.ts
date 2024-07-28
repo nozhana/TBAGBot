@@ -72,14 +72,14 @@ async function importGameData(
   jsonContent: string
 ) {
   const gameData: GameData = JSON.parse(jsonContent);
-  console.log(`🔎 GameData:\n${JSON.stringify(gameData)}`);
+  console.log(`🔎 GameData:\n${JSON.stringify(gameData, undefined, 2)}`);
 
   const entryRoomId = {
     id: gameData.player.starting_location,
     objectId: ObjectId(),
   };
 
-  console.log(`🔎 Entry room ID: ${JSON.stringify(entryRoomId)}`);
+  console.log(`🔎 Entry room ID: ${JSON.stringify(entryRoomId, undefined, 2)}`);
 
   const game = await prisma.game.create({
     data: {

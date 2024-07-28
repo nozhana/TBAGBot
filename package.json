@@ -4,9 +4,8 @@
   "description": "Text-Based Adventure Game Bot. Credits to Grammy.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prestart": "npx tsc --outDir dist",
-    "start": "node dist/index.js"
+    "postinstall": "npx prisma generate",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
