@@ -1,5 +1,6 @@
 btn-page = Page {$page}
 btn-back = 👈 Back
+cb-coming-soon = ✨ Coming Soon
 
 game_html-all = 🕹️ <b>Games</b>
 game_btn-import = ⬇️ Import Game
