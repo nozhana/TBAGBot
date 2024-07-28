@@ -18,8 +18,8 @@ async function importGameConversation(
       await ctx.reply("📁 Document uploaded.");
       const file = await ctx.api.getFile(message.document.file_id);
       const path = await file.download();
-      const buffer = await readFile(path, "utf8");
-      await importGameData(prisma, message.from.id, path);
+      const jsonContent = await readFile(path, "utf8");
+      await importGameData(prisma, message.from.id, jsonContent);
     } else if (message.text) {
       await importGameData(prisma, message.from.id, message.text);
     }

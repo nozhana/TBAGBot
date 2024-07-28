@@ -9,12 +9,6 @@ interface GameData {
     author: string;
     version: string;
     description: string;
-    initialData: {
-      health?: number;
-      stamina?: number;
-      attack?: number;
-      defense?: number;
-    };
   };
   locations: {
     id: string;
@@ -78,14 +72,14 @@ async function importGameData(
   jsonContent: string
 ) {
   const gameData: GameData = JSON.parse(jsonContent);
-  console.log(`🔎 GameData:\n${gameData}`);
+  console.log(`🔎 GameData:\n${JSON.stringify(gameData)}`);
 
   const entryRoomId = {
     id: gameData.player.starting_location,
     objectId: ObjectId(),
   };
 
-  console.log(`🔎 Entry room ID: ${entryRoomId}`);
+  console.log(`🔎 Entry room ID: ${JSON.stringify(entryRoomId)}`);
 
   const game = await prisma.game.create({
     data: {
@@ -93,10 +87,10 @@ async function importGameData(
       author: { connect: { id: userId } },
       description: gameData.meta.description,
       version: gameData.meta.version,
-      attack: gameData.meta.initialData.attack || 100,
-      defense: gameData.meta.initialData.defense || 100,
-      health: gameData.meta.initialData.health || 100,
-      stamina: gameData.meta.initialData.stamina || 100,
+      attack: gameData.player.stats.attack || 100,
+      defense: gameData.player.stats.defense || 100,
+      health: gameData.player.stats.health || 100,
+      stamina: gameData.player.stats.stamina || 100,
       entryRoomId: entryRoomId.objectId.str,
     },
   });
