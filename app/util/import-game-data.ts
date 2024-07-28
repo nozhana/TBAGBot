@@ -79,11 +79,14 @@ async function importGameData(
 ) {
   const data = await readFile(filePath, "utf8");
   const gameData: GameData = JSON.parse(data);
+  console.log(`🔎 GameData:\n${gameData}`);
 
   const entryRoomId = {
     id: gameData.player.starting_location,
     objectId: ObjectId(),
   };
+
+  console.log(`🔎 Entry room ID: ${entryRoomId}`);
 
   const game = await prisma.game.create({
     data: {
@@ -99,12 +102,16 @@ async function importGameData(
     },
   });
 
+  console.log(`🔎 Created game:\n${game}`);
+
   const itemIds: { id: string; objectId: ObjectId }[] = [];
 
   for (const location of gameData.locations) {
     for (const item of location.items)
       itemIds.push({ id: item.id, objectId: ObjectId() });
   }
+
+  console.log(`🔎 Item IDs:\n${itemIds}`);
 
   for (const location of gameData.locations) {
     const room = await prisma.room.create({
@@ -117,7 +124,9 @@ async function importGameData(
       },
     });
 
-    await prisma.room.update({
+    console.log(`🔎 Created room:\n${room}`);
+
+    const updatedRoom = await prisma.room.update({
       where: { id: room.id },
       data: {
         exits: {
@@ -131,10 +140,12 @@ async function importGameData(
       },
     });
 
+    console.log(`🔎 Created and connected exits to room:\n${updatedRoom}`);
+
     for (const item of location.items) {
       const itemId = itemIds.filter((e) => e.id === item.id)[0].objectId;
 
-      await prisma.room.update({
+      const updatedRoomWithItems = await prisma.room.update({
         where: { id: room.id },
         data: {
           items: {
@@ -163,6 +174,10 @@ async function importGameData(
           },
         },
       });
+
+      console.log(
+        `🔎 Created and connected items to room:\n${updatedRoomWithItems}`
+      );
     }
   }
 }
