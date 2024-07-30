@@ -1,5 +1,6 @@
 import { Direction, PrismaClient } from "@prisma/client";
 import ObjectId from "bson-objectid";
+import MyContext from "../core/context";
 
 interface GameData {
   meta: {
@@ -66,11 +67,13 @@ interface GameData {
 
 async function importGameData(
   prisma: PrismaClient,
-  userId: number,
-  jsonContent: string
+  jsonContent: string,
+  user: { id: number; firstName: string }
 ) {
+  const { id, firstName } = user;
+
   console.log(
-    `🏷️ Params:\nprisma: ${prisma}\nuserId: ${userId}\njsonContent: ${jsonContent}`
+    `🏷️ Params:\nprisma: ${prisma}\nuserId: ${id}\nfirstName: ${firstName}\njsonContent: ${jsonContent}`
   );
   const gameData: GameData = JSON.parse(jsonContent);
   console.log(`🔎 GameData:\n${JSON.stringify(gameData, undefined, 2)}`);
@@ -85,7 +88,12 @@ async function importGameData(
   const game = await prisma.game.create({
     data: {
       title: gameData.meta.title,
-      author: { connect: { id: userId } },
+      author: {
+        connectOrCreate: {
+          where: { id },
+          create: { id, firstName },
+        },
+      },
       description: gameData.meta.description,
       version: gameData.meta.version,
       attack: gameData.player.stats.attack || 100,
