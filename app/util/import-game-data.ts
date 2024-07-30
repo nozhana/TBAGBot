@@ -73,7 +73,9 @@ async function importGameData(
   const { id, firstName } = user;
 
   console.log(
-    `🏷️ Params:\nprisma: ${prisma}\nuserId: ${id}\nfirstName: ${firstName}\njsonContent: ${jsonContent}`
+    `🔎 prisma: ${prisma}\ntypeof prisma: ${typeof prisma}\nprisma.game: ${
+      prisma.game
+    }\ntypeof prisma.game: ${typeof prisma.game}`
   );
   const gameData: GameData = JSON.parse(jsonContent);
   console.log(`🔎 GameData:\n${JSON.stringify(gameData, undefined, 2)}`);
