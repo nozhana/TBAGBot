@@ -1,7 +1,5 @@
 import { Direction, PrismaClient } from "@prisma/client";
-import { readFile } from "fs/promises";
 import ObjectId from "bson-objectid";
-import { PathLike } from "fs";
 
 interface GameData {
   meta: {
@@ -71,6 +69,9 @@ async function importGameData(
   userId: number,
   jsonContent: string
 ) {
+  console.log(
+    `🏷️ Params:\nprisma: ${prisma}\nuserId: ${userId}\njsonContent: ${jsonContent}`
+  );
   const gameData: GameData = JSON.parse(jsonContent);
   console.log(`🔎 GameData:\n${JSON.stringify(gameData, undefined, 2)}`);
 
