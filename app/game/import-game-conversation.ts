@@ -33,7 +33,8 @@ async function importGameConversation(
     await ctx.reply("🕹️ Game data imported.");
   } catch (error) {
     await ctx.reply(`❌ <b>ERROR - IMPORT GAME:</b>\n${error}`);
-    console.log(`❌ <b>ERROR - IMPORT GAME:</b>\n${error}`);
+    console.error(`❌ ERROR - IMPORT GAME:\n${error}`);
+    if (error instanceof Error) console.error(`📚 STACKTRACE\n${error.stack}`);
   }
 }
 
